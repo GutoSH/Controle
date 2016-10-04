@@ -1,0 +1,309 @@
+#include <IRremote.h>
+#include <SoftwareSerial.h>
+    
+//Define os pinos para a serial   
+SoftwareSerial bluetooth(10, 11); // RX, TX  
+IRsend irsend;
+
+char comando, controle=0;
+    
+void setup()   
+{  
+  //Inicia o serial  
+  Serial.begin(9600); 
+  bluetooth.begin(9600);
+}  
+    
+void loop()  
+{  
+  if (bluetooth.available()) {  
+      if(controle == 0){
+        //Recebe por bluetooth o controle
+        controle = bluetooth.read();
+        Serial.write("controle: ");
+        Serial.write(controle);
+        Serial.write("\n");
+      }
+      if(controle == '1'){
+        //Recebe comando do botão
+        comando = bluetooth.read();
+        switch (comando){
+          //MUTE 
+          case 'm' :{
+            irsend.sendRC5(0xD, 12);
+            delay(40);
+            irsend.sendRC5(0xD, 12);
+            Serial.write("MUTE\n");
+            break;
+            }
+          //POWER
+          case 'p':{
+            irsend.sendRC5(0xC, 12);
+            delay(40);
+            irsend.sendRC5(0xC, 12);
+            Serial.write("POWER\n");
+            break;
+            }
+          //CH+
+          case 'a':{
+            unsigned int irSignal[] = {1750, 1650, 1750, 750, 900, 800, 900, 800, 900, 750, 900, 800, 900, 1600, 1750, 800, 900, 800, 900, 750, 900};
+            irsend.sendRaw(irSignal, sizeof(irSignal), 38);
+            delay(40);
+            irsend.sendRaw(irSignal, sizeof(irSignal), 38);
+            Serial.write("CH+\n");
+            break;
+            }
+          //CH-
+          case 'z':{
+            unsigned int irSignal[] = {1800, 1550, 1750, 800, 900, 800, 900, 750, 900, 800, 900, 800, 900, 1600, 1750, 800, 900, 750, 900, 1600, 900};
+            irsend.sendRaw(irSignal, sizeof(irSignal), 38); 
+            delay(40);
+            irsend.sendRaw(irSignal, sizeof(irSignal), 38);
+            Serial.write("CH-\n");
+            break;
+            }
+          //VOL+
+          case 's':{
+            unsigned int irSignal[] = {1800, 750, 900, 800, 900, 750, 900, 800, 900, 800, 900, 750, 900, 800, 900, 1600, 1750, 1650, 900, 750, 1750};
+            irsend.sendRaw(irSignal, sizeof(irSignal), 38); 
+            delay(40);
+            irsend.sendRaw(irSignal, sizeof(irSignal), 38);
+            Serial.write("VOLUME+\n");
+            break; 
+            }
+          //VOL-
+          case 'x':{
+            unsigned int irSignal[] = {1750, 750, 900 ,800 ,900 ,800 ,900 ,750 ,900 ,800 ,900 ,750 ,900 ,800 ,900 ,1650 ,1750 ,1600 ,1750 ,1600 ,900};
+            irsend.sendRaw(irSignal, sizeof(irSignal), 38); 
+            delay(40);
+            irsend.sendRaw(irSignal, sizeof(irSignal), 38);
+            Serial.write("VOLUME-\n");
+            break;
+            }
+           //1
+           case '1':{
+            irsend.sendRC5(0x1, 12);
+            delay(40);
+            irsend.sendRC5(0x1, 12);
+            Serial.write("1\n");
+            break;
+            }
+          //2
+          case '2':{
+            irsend.sendRC5(0x2, 12);
+            delay(40);
+            irsend.sendRC5(0x2, 12);
+            Serial.write("2\n");
+            break;
+            }
+           //3
+          case '3':{
+            irsend.sendRC5(0x3, 12);
+            delay(40);
+            irsend.sendRC5(0x3, 12);
+            Serial.write("3\n");
+            break;
+            }
+           //4
+           case '4':{
+            irsend.sendRC5(0x4, 12);
+            delay(40);
+            irsend.sendRC5(0x4, 12);
+            Serial.write("4\n");
+            break;
+            }
+          //5
+          case '5':{
+            irsend.sendRC5(0x5, 12);
+            delay(40);
+            irsend.sendRC5(0x5, 12);
+            Serial.write("5\n");
+            break;
+            }
+          //6
+          case '6':{
+            irsend.sendRC5(0x6, 12);
+            delay(40);
+            irsend.sendRC5(0x6, 12);
+            Serial.write("6\n");
+            break;
+            }
+           //7
+           case '7':{
+            irsend.sendRC5(0x7, 12);
+            delay(40);
+            irsend.sendRC5(0x7, 12);
+            Serial.write("7\n");
+            break;
+            }
+          //8
+          case '8':{
+            irsend.sendRC5(0x8, 12);
+            delay(40);
+            irsend.sendRC5(0x8, 12);
+            Serial.write("8\n");
+            break;
+            }
+          //9
+          case '9':{
+            irsend.sendRC5(0x9, 12);
+            delay(40);
+            irsend.sendRC5(0x9, 12);
+            Serial.write("9\n");
+            break;
+            }
+          //0
+          case '0':{
+            irsend.sendRC5(0x0, 12);
+            delay(40);
+            irsend.sendRC5(0x0, 12);
+            Serial.write("0\n");
+            break;    
+            }
+          }
+      }
+      if(controle == '2'){
+        //Recebe comando do botão
+        comando = bluetooth.read();
+        switch (comando){
+          //MUTE 
+          case 'm' :{
+            irsend.sendRC6(0xD, 20);
+            Serial.write("MUTE\n");
+            break;
+            }
+          //POWER
+          case 'p':{
+            irsend.sendRC6(0xC, 20);
+            Serial.write("POWER\n");
+            break;
+            }
+          //CH+
+          case 'a':{
+            irsend.sendRC6(0x4C, 20);
+            Serial.write("CH+\n");
+            break;
+            }
+          //CH-
+          case 'z':{
+            irsend.sendRC6(0x4D, 20);
+            Serial.write("CH-\n");
+            break;
+            }
+          //VOL+
+          case 's':{
+            irsend.sendRC6(0x10, 20);
+            Serial.write("VOLUME+\n");
+            break; 
+            }
+          //VOL-
+          case 'x':{
+            irsend.sendRC6(0x11, 20);
+            Serial.write("VOLUME-\n");
+            break;
+            }
+           //1
+           case '1':{
+            irsend.sendRC6(0x1, 20);
+            Serial.write("1\n");
+            break;
+            }
+          //2
+          case '2':{
+            irsend.sendRC6(0x2, 20);
+            Serial.write("2\n");
+            break;
+            }
+           //3
+          case '3':{
+            irsend.sendRC6(0x3, 20);
+            Serial.write("3\n");
+            break;
+            }
+           //4
+           case '4':{
+            irsend.sendRC6(0x4, 20);
+            Serial.write("4\n");
+            break;
+            }
+          //5
+          case '5':{
+            irsend.sendRC6(0x5, 20);
+            Serial.write("5\n");
+            break;
+            }
+          //6
+          case '6':{
+            irsend.sendRC6(0x6, 20);
+            Serial.write("6\n");
+            break;
+            }
+           //7
+           case '7':{
+            irsend.sendRC6(0x7, 20);
+            Serial.write("7\n");
+            break;
+            }
+          //8
+          case '8':{
+            irsend.sendRC6(0x8, 20);
+            Serial.write("8\n");
+            break;
+            }
+          //9
+          case '9':{
+            irsend.sendRC6(0x9, 20);
+            Serial.write("9\n");
+            break;
+            }
+          //0
+          case '0':{
+            irsend.sendRC6(0x0, 20);
+            Serial.write("0\n");
+            break;    
+            }
+          }
+      }
+      if(controle == '3'){
+        //Recebe comando do botão
+        comando = bluetooth.read();
+        switch (comando){
+          //CH+
+          case 'a':{
+            irsend.sendNEC(0x807620DF, 32);
+            delay(40);
+            irsend.sendNEC(0x807620DF, 32);
+            Serial.write("CH+\n");
+            break;
+            }
+          //CH-
+          case 'z':{
+            irsend.sendNEC(0x8076A05F, 32);
+            delay(40);
+            irsend.sendNEC(0x8076A05F, 32);
+            Serial.write("CH-\n");
+            break;
+            }
+          //VOL+
+          case 's':{
+            irsend.sendNEC(0x80767887, 32);
+            delay(40);
+            irsend.sendNEC(0x80767887, 32);
+            Serial.write("VOLUME+\n");
+            break; 
+            }
+          //VOL-
+          case 'x':{
+            irsend.sendNEC(0x8076F807, 32);
+            delay(40);
+            irsend.sendNEC(0x8076F807, 32);
+            Serial.write("VOLUME-\n");
+            break;
+            }
+          }
+        }
+      if(comando == 'i'){
+        controle = 0;
+        }
+  }
+}
